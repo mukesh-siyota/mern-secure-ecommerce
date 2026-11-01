@@ -2,10 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar.jsx';
 import AuthPage from './pages/AuthPage.jsx';
-
-// Inline placeholder implementations of screens to ensure it builds out of the box
-const HomeScreen = () => <div className="p-6"><h1 className="text-2xl font-bold">Welcome to MERN Shop</h1><p className="mt-2 text-gray-600">Browse our unique collections.</p></div>;
-const CartScreen = () => <div className="p-6"><h1 className="text-2xl font-bold">Shopping Cart</h1></div>;
+import CartPage from './pages/CartPage.jsx';
+import ProductCatalog from './pages/ProductCatalog.jsx';
+import ProductDetails from './pages/ProductDetails.jsx';
 
 function App() {
   return (
@@ -14,10 +13,11 @@ function App() {
         <Navbar />
         <main className="flex-grow container mx-auto px-4 py-8">
           <Routes>
-            <Route path="/" element={<HomeScreen />} />
+            <Route path="/" element={<ProductCatalog />} />
             <Route path="/login" element={<AuthPage mode="login" />} />
             <Route path="/register" element={<AuthPage mode="register" />} />
-            <Route path="/cart" element={<CartScreen />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/product/:id" element={<ProductDetails />} />
           </Routes>
         </main>
         <footer className="bg-gray-800 text-white text-center py-4 text-sm">

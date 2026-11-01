@@ -13,9 +13,15 @@ const cartSlice = createSlice({
       const existItem = state.cartItems.find((x) => x._id === item._id);
 
       if (existItem) {
-        state.cartItems = state.cartItems.map((x) => (x._id === existItem._id ? item : x));
+        existItem.qty = Math.min(
+          existItem.qty + (item.qty || 1),
+          item.countInStock || existItem.countInStock || Number.MAX_SAFE_INTEGER
+        );
       } else {
-        state.cartItems.push(item);
+        state.cartItems.push({
+          ...item,
+          qty: Math.min(item.qty || 1, item.countInStock || item.qty || 1),
+        });
       }
       localStorage.setItem('cart', JSON.stringify(state));
     },
@@ -23,8 +29,17 @@ const cartSlice = createSlice({
       state.cartItems = state.cartItems.filter((x) => x._id !== action.payload);
       localStorage.setItem('cart', JSON.stringify(state));
     },
+    updateCartQuantity: (state, action) => {
+      const { id, qty } = action.payload;
+      const item = state.cartItems.find((cartItem) => cartItem._id === id);
+
+      if (item && Number.isInteger(qty) && qty > 0) {
+        item.qty = item.countInStock > 0 ? Math.min(qty, item.countInStock) : qty;
+        localStorage.setItem('cart', JSON.stringify(state));
+      }
+    },
   },
 });
 
-export const { addToCart, removeFromCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, updateCartQuantity } = cartSlice.actions;
 export default cartSlice.reducer;
