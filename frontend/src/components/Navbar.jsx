@@ -36,9 +36,14 @@ const Navbar = () => {
               </button>
             </div>
           ) : (
-            <Link to="/login" className="flex items-center text-gray-600 hover:text-indigo-600 transition">
-              <User className="w-5 h-5 mr-1" /> Login
-            </Link>
+            <div className="flex items-center space-x-4">
+              <Link to="/login" className="flex items-center text-gray-600 hover:text-indigo-600 transition">
+                <User className="w-5 h-5 mr-1" /> Login
+              </Link>
+              <Link to="/register" className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition">
+                Register
+              </Link>
+            </div>
           )}
         </div>
       </div>

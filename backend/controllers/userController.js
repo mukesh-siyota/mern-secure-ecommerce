@@ -6,9 +6,14 @@ import generateToken from '../utils/generateToken.js';
 export const authUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+    const username = req.body.username ?? req.body.name;
     const user = await User.findOne({ email });
 
-    if (user && (await user.matchPassword(password))) {
+    const usernameMatches = !username
+      || (typeof username === 'string'
+        && user?.name.toLowerCase() === username.trim().toLowerCase());
+
+    if (user && usernameMatches && (await user.matchPassword(password))) {
       res.json({
         _id: user._id,
         name: user.name,
@@ -27,7 +32,8 @@ export const authUser = async (req, res, next) => {
 // @route   POST /api/users
 export const registerUser = async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { email, password } = req.body;
+    const name = req.body.username ?? req.body.name;
     const userExists = await User.findOne({ email });
 
     if (userExists) {
